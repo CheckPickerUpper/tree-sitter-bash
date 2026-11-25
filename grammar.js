@@ -51,6 +51,7 @@ module.exports = grammar({
     [$.redirected_statement, $.command],
     [$.redirected_statement, $.command_substitution],
     [$.function_definition, $.command_name],
+    [$.pipeline],
   ],
 
   inline: $ => [
@@ -411,10 +412,10 @@ module.exports = grammar({
 
     pipeline: $ => prec.right(seq(
       $._statement_not_pipeline,
-      repeat1(prec.left(seq(
+      repeat1(seq(
         choice('|', '|&'),
         $._statement_not_pipeline,
-      ))),
+      )),
     )),
 
     list: $ => prec.left(-1, seq(
